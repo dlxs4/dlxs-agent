@@ -1,0 +1,20 @@
+{
+  "name": "Shift Host Node",
+  "image": "mcr.microsoft.com/devcontainers/universal:2",
+  "features": {
+    "ghcr.io/devcontainers/features/docker-in-docker:2": {},
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+  },
+  "customizations": {
+    "codespaces": {
+      "openPorts": ["4000", "3001-3010"]
+    }
+  },
+  "portsAttributes": {
+    "4000": { "label": "Shift Agent", "visibility": "public" },
+    "3001-3010": { "label": "User Payload", "visibility": "public" }
+  },
+  "postCreateCommand": "until curl -fsSL \"$GATEWAY_URL/api/internal/download-agent\" -o agent.js; do echo 'Waiting for Gateway...'; sleep 5; done",
+  
+  "postStartCommand": "bash -c 'while ! docker info > /dev/null 2>&1; do echo \"Waiting for Docker...\"; sleep 2; done; while true; do node agent.js >> /tmp/agent.log 2>&1; echo \"Agent crashed. Restarting in 5s...\"; sleep 5; done &'"
+}
