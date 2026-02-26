@@ -3,7 +3,8 @@
   "image": "mcr.microsoft.com/devcontainers/base:ubuntu",
   "features": {
     "ghcr.io/devcontainers/features/docker-in-docker:2": {},
-    "ghcr.io/devcontainers/features/node:1": { "version": "20" }
+    "ghcr.io/devcontainers/features/node:1": { "version": "20" },
+    "ghcr.io/devcontainers/features/github-cli:1": {} 
   },
   "forwardPorts": [4000],
   "portsAttributes": {
@@ -11,5 +12,5 @@
     "3001-3010": { "label": "User Payload", "visibility": "public" }
   },
   "postCreateCommand": "until curl -fsSL \"$GATEWAY_URL/api/internal/download-agent\" -o agent.js; do echo 'Waiting for Gateway...'; sleep 5; done",
-  "postStartCommand": "nohup bash -c 'echo \"[INIT] Starting background task...\" > /tmp/agent.log; while ! docker info >> /tmp/agent.log 2>&1; do echo \"[INIT] Waiting for Docker...\" >> /tmp/agent.log; sleep 2; done; echo \"[INIT] Docker is up. Starting agent...\" >> /tmp/agent.log; while true; do node /workspaces/dlxs-agent/agent.js >> /tmp/agent.log 2>&1; echo \"[WARN] Agent crashed. Restarting in 5s...\" >> /tmp/agent.log; sleep 5; done' >/dev/null 2>&1 &"
+  "postStartCommand": "nohup bash -c 'echo \"[INIT] Starting...\" > /tmp/agent.log; while ! docker info >> /tmp/agent.log 2>&1; do sleep 2; done; while true; do node /workspaces/dlxs-agent/agent.js >> /tmp/agent.log 2>&1; sleep 5; done' >/dev/null 2>&1 &"
 }
