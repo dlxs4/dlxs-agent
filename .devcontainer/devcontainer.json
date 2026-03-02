@@ -11,6 +11,6 @@
     "4000": { "label": "Shift Agent", "visibility": "public" },
     "3001-3010": { "label": "User Payload", "visibility": "public" }
   },
-  "postCreateCommand": "until curl -fsSL \"$GATEWAY_URL/api/internal/download-agent\" -o agent.js; do echo 'Waiting for Gateway...'; sleep 5; done && sudo npm install -g pm2",
+  "postCreateCommand": "until curl -fsSL \"$GATEWAY_URL/api/internal/download-agent\" -o agent.js; do echo 'Waiting for Gateway...'; sleep 5; done && npm install -g pm2",
   "postStartCommand": "bash -c 'while ! docker info > /dev/null 2>&1; do sleep 2; done; pm2 start /workspaces/dlxs-agent/agent.js --name shift-agent'"
 }
